@@ -1,0 +1,14 @@
+model1
+    user1
+    user2
+    created
+
+
+
+model2
+    chat_id
+    message
+    sender
+    reciever
+    created
+    status

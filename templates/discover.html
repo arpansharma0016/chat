@@ -1,0 +1,52 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title></title>
+
+
+    <!-- Bootstrap core CSS -->
+    <link href="{% static 'css/bootstrap.css' %}" rel="stylesheet" />
+        <link href="{% static 'css/discover.css' %}" rel="stylesheet" />
+        <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+
+  </head>
+
+  <body>
+    <h1 id="title">Listen Now</h1>
+    
+
+    <div class="scrolly">
+        <!-- <h2 class="topT">Top Tracks</h2> -->
+        <button id="left"><i class="fa fa-arrow-left"></i></button>
+        <button id="right"><i class="fa fa-arrow-right"></i></button>
+    <ul class="carouselPre">
+        {% for me in mee %}
+        <li class="itemsC">
+            <div class="contents">
+                <h2 class="leftTxtDet">{{me.first_name}}</h2>
+                <div class="textDet" style="justify-content: center; background-color: cornflowerblue;"><p>{{me.bio}}</p></div>
+            </div>
+            {% if me.image %}
+            <div class="bgImg"><img src="/media/{{me.image}}" alt="{{me.first_name}}" height="200px"></div>
+            {% else %}
+            <div class="bgImg"><img src="https://cdn0.iconfinder.com/data/icons/set-ui-app-android/32/8-512.png" height="300px" alt="{{me.first_name}}"></div>
+            {% endif %}
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+
+
+
+
+
+
+<script src="{% static 'js/jquery.js' %}"></script>
+<script src="{% static 'js/discover.js' %}"></script>
+    
+  </body>
+</html>

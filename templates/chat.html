@@ -1,0 +1,535 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <title>Simple Chat App {{usr}}</title>
+    <!-- Bootstrap icons-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
+    <!-- Core theme CSS (includes Bootstrap)-->
+    <link href="{% static 'css/chat.css' %}" rel="stylesheet" />
+    <link href="{% static 'css/styles.css' %}" rel="stylesheet" />
+</head>
+
+<body>
+    <div class="home-page__content messages-page">
+        <div class="container-fluid h-100">
+            <div class="row px-0 h-100">
+                <!-- start message list section  -->
+                <div class="col-sm-12 col-md-4 col-lg-5 col-xl-3 px-0 messages-page__list-scroll">
+                    <div id="error_notify">
+                    </div>
+                    {% for message in messages %}
+                    <div class="alert alert-primary alert-dismissible show" role="alert" id="analert" onclick="closealert(event)">
+                        <strong class="pt-7">{{message}}</strong>
+                    </div>
+                    {% endfor %}
+
+                    <div class="messages-page__header mb-0 px-4 pt-3 pb-3">
+
+                        <span class="messages-page__title">Chats</span> &nbsp;
+                        <div class="messages-page__dark-mode-toogler" id="unseenchatsdiv">
+                            <strong id="unseenchatsnumber"></strong>
+                        </div>
+                        &nbsp;
+                        <div class="messages-page__dark-mode-toogler" id="searchuserstoggler" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                            <i class="bi bi-search"></i>
+                        </div>
+                        &nbsp;
+                        <div class="messages-page__dark-mode-toogler" id="settingstoggler" data-bs-toggle="modal" data-bs-target="#settingsModal">
+                            <i class="bi bi-gear"></i>
+                        </div>
+                        &nbsp;
+                        <div class="messages-page__dark-mode-toogler" id="logouttoggler" data-bs-toggle="modal" data-bs-target="#logoutmodal">
+                            <i class="bi bi-box-arrow-right"></i>
+                        </div>
+                    </div>
+                    <div class="messages-page__search mb-0 px-3 pb-3">
+                        <div class="custom-form__search-wrapper">
+                            <input type="text" class="form-control custom-form" id="searchchatsinput" placeholder="Search chats…" autocomplete="off">
+                            <ul class="messages-page__list px-1 px-md-3" id="addsearchuserchatshere">
+                            </ul>
+                        </div>
+                    </div>
+
+                    <ul class="messages-page__list pb-5 px-1 px-md-3" id="adduserchatshere">
+
+                        <!-- <li class="messaging-member messaging-member--new messaging-member--online" onclick="loadchat(event, '{{chat.id}}', '{{user.first_name}}')">
+                      <div class="messaging-member__wrapper">
+                        <div class="messaging-member__avatar">
+                          <img src="https://randomuser.me/api/portraits/thumb/men/74.jpg" alt="Bessie Cooper" loading="lazy">
+                          <div class="user-status"></div>
+                        </div>
+          
+                        <span class="messaging-member__name">{{user.first_name}}</span>
+                        <span class="messaging-member__message">Yes, I need your help with the project, it need it done by tomorrow 😫</span>
+                      </div>
+                    </li> -->
+
+                    </ul>
+                </div>
+                <!-- end message list section  -->
+                <!-- start content section  -->
+                <div class="chat col-sm-12 col-md-8 col-lg-7 col-xl-6 px-0 pl-md-1">
+                    <div class="chat__container">
+                        <div class="chat__wrapper py-2 pt-mb-2 pb-md-3">
+                            <div class="chat__messaging messaging-member--online pb-2 pb-md-2 pl-2 pl-md-4 pr-2">
+                                <div class="chat__previous d-flex d-md-none">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="svg-icon svg-icon--previous" viewBox="0 0 45.5 30.4">
+                            <path d="M43.5,13.1H7l9.7-9.6A2.1,2.1,0,1,0,13.8.6L.9,13.5h0L.3,14v.6c0,.1-.1.1-.1.2v.4a2,2,0,0,0,.6,1.5l.3.3L13.8,29.8a2.1,2.1,0,1,0,2.9-2.9L7,17.2H43.5a2,2,0,0,0,2-2A2.1,2.1,0,0,0,43.5,13.1Z" fill="#f68b3c" />
+                          </svg>
+                                </div>
+                                <div id="openunseenchatnumber"></div>
+                                <!-- <div class="chat__notification d-flex d-md-none chat__notification--new">
+                          <span>1</span>
+                        </div> -->
+                                <div class="chat__infos pl-2 pl-md-0">
+                                    <div class="chat-member__wrapper" data-online="true">&nbsp;&nbsp;
+                                        <div class="chat-member__avatar" id="chatuserimage">
+                                        </div>
+                                        <div class="chat-member__details" id="chatusername">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="chat__actions mr-2" id="chatuseractions">
+                                    <ul class="m-0">
+                                        <!-- <li>
+                              <svg xmlns="http://www.w3.org/2000/svg" class="svg-icon" viewBox="0 0 48 48">
+                                <path d="M38.4,48c-2.1,0-5.1-.8-9.5-3.2a62.9,62.9,0,0,1-14.6-11A61.7,61.7,0,0,1,3.2,19C-.9,11.8-.3,8.5.7,6.4A9.7,9.7,0,0,1,4.8,2,21.1,21.1,0,0,1,7.8.4h.3c1.8-.7,3-.3,4.9,1.5h.1a40.1,40.1,0,0,1,5.4,8.2c1.3,2.6,1.6,4.3-.2,6.9l-.5.6c-.8,1-.8,1.2-.8,1.6s1.9,3.4,5.2,6.7S28,30.8,28.8,31s.6,0,1.6-.8l.7-.4c2.5-1.9,4.2-1.6,6.8-.3A40.6,40.6,0,0,1,46.1,35h.1c1.8,1.9,2.2,3.1,1.5,4.9v.2h0a21.1,21.1,0,0,1-1.6,3,10,10,0,0,1-4.3,4.1A7.7,7.7,0,0,1,38.4,48ZM9.5,4.1H9.2L6.9,5.4H6.8A6.3,6.3,0,0,0,4.3,8.1c-.3.7-1.2,2.6,2.4,9A58.9,58.9,0,0,0,17.1,30.9,58.2,58.2,0,0,0,30.9,41.3c6.4,3.6,8.4,2.7,9.1,2.4a6.7,6.7,0,0,0,2.5-2.5.1.1,0,0,0,.1-.1c.5-.8.9-1.6,1.3-2.4v-.2l-.5-.6a35.4,35.4,0,0,0-7.3-4.8c-1.7-.8-1.8-.8-2.7-.1l-.6.4A5.3,5.3,0,0,1,28,34.9c-2.9-.6-7.4-4.9-8.7-6.2s-5.6-5.8-6.2-8.7.6-3.6,1.5-4.8l.4-.6c.7-.9.8-1-.1-2.7a35.4,35.4,0,0,0-4.8-7.3Z" fill="#f68b3c" />
+                              </svg>
+                            </li>-->
+                                        <!-- <li> 
+                              <svg xmlns="http://www.w3.org/2000/svg" class="svg-icon" viewBox="0 0 46.8 47.4">
+                                <path d="M35.8,47.4H11a11,11,0,0,1-11-11V11.6A11,11,0,0,1,11,.6h8.8a2,2,0,1,1,0,4H11a7,7,0,0,0-7,7V36.4a7,7,0,0,0,7,7H35.8a7,7,0,0,0,7-7v-9a2,2,0,1,1,4,0v9A11,11,0,0,1,35.8,47.4Z" fill="#f68b3c" />
+                                <path d="M36.6,20.4A10.2,10.2,0,1,1,46.8,10.2,10.2,10.2,0,0,1,36.6,20.4ZM36.6,4a6.2,6.2,0,1,0,6.2,6.2A6.2,6.2,0,0,0,36.6,4Z" fill="#f68b3c" />
+                              </svg>
+                            </li> -->
+                                        <!--<div id="videocalliconcontainer">
+                               <li>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="currentColor" class="bi bi-camera-video" viewBox="0 0 16 16">
+                                  <path fill-rule="evenodd" d="M0 5a2 2 0 0 1 2-2h7.5a2 2 0 0 1 1.983 1.738l3.11-1.382A1 1 0 0 1 16 4.269v7.462a1 1 0 0 1-1.406.913l-3.111-1.382A2 2 0 0 1 9.5 13H2a2 2 0 0 1-2-2V5zm11.5 5.175 3.5 1.556V4.269l-3.5 1.556v4.35zM2 4a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h7.5a1 1 0 0 0 1-1V5a1 1 0 0 0-1-1H2z"/>
+                                </svg>
+                              </li> 
+                            </div>-->
+                                        <li class="chat__details d-flex d-xl-none">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="svg-icon" viewBox="0 0 42.2 11.1">
+                                <g>
+                                  <circle cx="5.6" cy="5.6" r="5.6" fill="#d87232" />
+                                  <circle cx="21.1" cy="5.6" r="5.6" fill="#d87232" />
+                                  <circle cx="36.6" cy="5.6" r="5.6" fill="#d87232" />
+                                </g>
+                              </svg>
+                                        </li>
+                                    </ul>
+
+                                </div>
+                            </div>
+                            <div class="chat__content pt-4" id="messagediv">
+                                <ul class="chat__list-messages" id="addmessagehere">
+                                    <!-- <div class="chat__time">Yesterday at 16:43</div> -->
+                                    <!-- <li>
+                            <div class="chat__bubble chat__bubble--you" style="background-color: transparent;">
+                              <img src="https://i.pinimg.com/originals/f7/cd/83/f7cd8321739c362674363cccd59e2835.jpg" height="120px" width="100px" style="object-fit: cover; border-radius: 10px;">
+                              <div style="font-size: 9px; width: 100%; text-align: right;color: black;"><i>Yesterday at 16:43</i></div>
+                            </div>
+                          </li>
+                          <li>
+                            <div class="chat__bubble chat__bubble--me">
+                              Hi! I just checked, your order went through and is on it's way home. Enjoy your new computer! 😃
+                              <br><br>
+                              <div style="font-size: 9px; width: 100%; text-align: right;"><i>Yesterday at 16:43</i></div>
+                            </div>
+                          </li> -->
+                                    <section class="page_404">
+                                        <div class="container">
+                                            <div class="row">
+                                                <div class="col-sm-12 ">
+                                                    <div class="col-sm-10 col-sm-offset-1  text-center">
+                                                        <div class="four_zero_four_bg">
+                                                        </div>
+
+                                                        <div class="contant_box_404">
+                                                            <h3 class="h2" style="color: #a3a3a3;">
+                                                                Select a chat to message!
+                                                            </h3>
+
+                                                            <p style="color: #a3a3a3;"></p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </section>
+
+                                </ul>
+                            </div>
+                            <div id="replymessagebox" onclick="remove_reply(event)" style="padding-right: 20px;"></div>
+                            <input type="hidden" id="replymessageid" value="">
+                            <input type="hidden" id="replymessagemessage" value="">
+                            <input type="hidden" id="replymessagerepliedd" value="">
+                            <input type="hidden" id="replymessagetype" value="">
+                            <div class="chat__send-container px-2 px-md-3 pt-1 pt-md-3" id="chatinputbox">
+                            </div>
+
+                            <div class="modal" id="deletemessagemodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content">
+                                        <div style="width: 100%; max-width: 100%; text-align: right;">
+                                            <button type="button" class="btn-close m-3" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div id="messagetext" style="width: 100%; max-width: 100%; text-align: center;">
+
+                                            </div><br>
+                                            <div class="row">
+                                                <div class="col">
+                                                    <div style="width: 100%; max-width: 100%; text-align: center;">
+                                                        <i class="bi bi-reply" style="font-size: 50px; color: royalblue;"></i>
+                                                    </div>
+                                                    <div id="replymessagetext" style="width: 100%; max-width: 100%; text-align: center;">
+
+                                                    </div><br>
+                                                    <div style="width: 100%; max-width: 100%; text-align: center;">
+                                                        <button class="btn btn-outline-primary" id="replymessagebutton">Reply</button>
+                                                    </div><br>
+                                                </div>
+                                                <div class="col">
+                                                    <div style="width: 100%; max-width: 100%; text-align: center;">
+                                                        <i class="bi bi-trash" style="font-size: 50px; color: royalblue;"></i>
+                                                    </div>
+                                                    <div id="deletemessagetext" style="width: 100%; max-width: 100%; text-align: center;">
+
+                                                    </div><br>
+                                                    <div style="width: 100%; max-width: 100%; text-align: center;">
+                                                        <button class="btn btn-outline-danger" id="deletemessagebutton">Delete?</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+
+
+                            <div class="modal" id="replymessagemodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content">
+                                        <div style="width: 100%; max-width: 100%; text-align: right;">
+                                            <button type="button" class="btn-close m-3" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div id="replymodalmessagetext" style="width: 100%; max-width: 100%; text-align: center;">
+
+                                            </div><br>
+                                            <div style="width: 100%; max-width: 100%; text-align: center;">
+                                                <i class="bi bi-reply" style="font-size: 50px; color: royalblue;"></i>
+                                            </div>
+                                            <div id="replymodallmessagetext" style="width: 100%; max-width: 100%; text-align: center;">
+
+                                            </div><br>
+                                            <div style="width: 100%; max-width: 100%; text-align: center;">
+                                                <button class="btn btn-outline-primary" id="replymodalmessagebutton">Reply</button>
+                                            </div><br>
+
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <!-- <div class="modal" id="videocallmodal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered modal-lg">
+                          <div class="modal-content">
+                            <div class="modal-body">
+                              <div style="max-width: 100%; width: 100%; text-align: center;">
+                                <video id="remote-video" width="100%" height="400px" style="object-fit: cover;" autoplay></video>
+                              </div>
+                              <div class="container" style="max-width: 100%; width: 100%; text-align: center;">
+                                <div class="row">
+                                  <div class="col-6" style="display: flex; justify-content: center; align-items: center;">
+                                    <div class="btn btn-danger btn-lg" id="cutvideocall" style="border-radius: 50%;"><i class="bi bi-voicemail"></i></div>
+                                  </div>
+                                  <div class="col-6">
+                                    <video id="local-video" width="80%" height="120px" style="object-fit: cover;" autoplay>
+                                    </video>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div> -->
+
+
+                            <!-- <div class="modal" id="acceptvideocallmodal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered modal-lg">
+                          <div class="modal-content">
+                            <div class="modal-body">
+                              <button class="btn btn-primary" id="acceptvcbutton">Accept</button>
+                            </div>
+                          </div>
+                        </div>
+                      </div> -->
+
+
+                            <div class="modal modall" id="viewimagemodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-dialogg modal-dialog-centered modal-dialog-scrollable modal-lg">
+                                    <div class="modal-content modal-contentt">
+                                        <div style="width: 100%; max-width: 100%; text-align: right;">
+                                            <button type="button" class="btn-close m-3" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body modal-bodyy" style="text-align: center; justify-content: center; background-color: transparent;">
+                                            <img id="img01" style="object-fit: contain;height: 100%; width: 100%;">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <!-- end content section  -->
+                <!-- start infos section  -->
+                <div class="col-sm-12 col-md-5 col-lg-4 col-xl-3 px-4 px-sm-5 px-lg-4 user-profile">
+                    <div class="user-profile__close d-flex d-xl-none">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="svg-icon" viewBox="0 0 38.8 38.9">
+                      <g>
+                        <path d="M2,38.9a1.9,1.9,0,0,1-1.4-.5,2.1,2.1,0,0,1,0-2.9L35.4.6a1.9,1.9,0,0,1,2.8,0,1.9,1.9,0,0,1,0,2.8L3.4,38.4A1.9,1.9,0,0,1,2,38.9Z" fill="#d87232" />
+                        <path d="M36.8,38.9a1.9,1.9,0,0,1-1.4-.5L.6,3.4A1.9,1.9,0,0,1,.6.6,1.9,1.9,0,0,1,3.4.6L38.2,35.5a2.1,2.1,0,0,1,0,2.9A1.9,1.9,0,0,1,36.8,38.9Z" fill="#d87232" />
+                      </g>
+                    </svg>
+                    </div>
+                    <div class="user-profile__wrapper" id="writeuserdatahere">
+                        <div class="user-profile__avatar">
+                            {% if use.image %}
+                            <img src="/media/{{use.image}}" alt="{{use.first_name}}" loading="lazy"> {% else %}
+                            <img src="https://cdn0.iconfinder.com/data/icons/set-ui-app-android/32/8-512.png" alt="{{use.first_name}}" loading="lazy"> {% endif %}
+                        </div>
+                        <div class="user-profile__details mt-1">
+                            <span class="user-profile__name">{{use.first_name}}</span>
+                            <span class="user-profile__phone">{{use.email}}</span>
+                            <span class="user-profile__location">{{use.location}}</span>
+                        </div>
+                        <div class="user-profile__description">
+                            {% if use.bio %}
+                            <p><strong>Bio: </strong>{{use.bio}}</p>
+                            {% endif %}
+                        </div>
+                        <!-- <div class="user-profile__learning mt-4">
+                      <span class="user-profile__label">Social Medias</span>
+                      <ul class="user-profile__tags user-profile__tags--primary mt-2">
+                        <li><a href="https://www.instagram.com/tiantsoa_sh/" target="_blank">Instagram</a></li>
+                        <li><a href="https://www.linkedin.com/in/tiantsoa-rabemananjara-254655152/" target="_blank">Linkedin</a></li>
+                        <li><a href="https://codepen.io/tiantsoa" target="_blank">Codepen</a></li>
+                      </ul>
+                    </div>
+                    <div class="user-profile__hobbies">
+                      <span class="user-profile__label">Activities</span>
+                      <ul class="user-profile__tags user-profile__tags--secondary mt-2">
+                        <li>Biking</li>
+                        <li>Cooking</li>
+                        <li>Traveling</li>
+                        <li>Grahic design</li>
+                      </ul>
+                    </div> -->
+                    </div>
+                </div>
+                <!-- end infos section  -->
+            </div>
+        </div>
+    </div>
+
+    <div class="modal modall" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialogg modal-dialog-centered modal-dialog-scrollable modal-lg">
+            <div class="modal-content modal-contentt">
+                <div style="width: 100%; max-width: 100%; text-align: right;">
+                    <button type="button" class="btn-close m-3" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body modal-bodyy">
+
+                    <div class="messages-page__search mb-0 px-3 pb-3">
+                        <div class="custom-form__search-wrapper">
+                            <input type="text" class="form-control custom-form" id="searchusersinput" placeholder="Search users…" autocomplete="off">
+                        </div>
+                    </div>
+                    <div class="col-12 px-0">
+                        <ul class="messages-page__list pb-5 px-1 px-md-3" id="adduserchatshere">
+                            <div id="searchuserscontainer">
+                                <section class="page_404">
+                                    <div class="row">
+                                        <div class="col-sm-12 ">
+                                            <div class="col-sm-10 col-sm-offset-1  text-center"><br><br>
+
+                                                <div class="contant_box_404">
+                                                    <h3 class="h2" style="color: #a3a3a3;">
+                                                        Type in to search a user.
+                                                    </h3>
+
+                                                    <p style="color: #a3a3a3;"></p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </section>
+                            </div>
+                        </ul>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal modall" id="openusermodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialogg modal-dialog-centered modal-dialog-scrollable modal-lg">
+            <div class="modal-content modal-contentt">
+                <div style="width: 100%; max-width: 100%; text-align: right;">
+                    <button type="button" class="btn-close m-3" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body modal-bodyy">
+                    <div class="row">
+                        <div class="col-1"></div>
+                        <div class="col-10" id="modaluserhere">
+                        </div>
+                        <div class="col-1"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="settingsModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+            <div class="modal-content">
+                <div style="width: 100%; max-width: 100%; text-align: right;">
+                    <button type="button" class="btn-close m-3" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" style="max-height: 600px; height:550px;">
+                    <div class="row">
+                        <div class="col-1"></div>
+                        <div class="col-10">
+                            <form method="POST" enctype="multipart/form-data">{% csrf_token %}
+                                <div class="user-profile__avatar">
+                                    <label for="imagepreviewinput">
+                            <div id="imagepreview">
+                              {% if use.image %}
+                              <img src="/media/{{use.image}}" alt="{{use.first_name}}" loading="lazy">
+                              {% else %}
+                              <img src="https://cdn0.iconfinder.com/data/icons/set-ui-app-android/32/8-512.png" alt="{{use.first_name}}" loading="lazy">
+                              {% endif %}
+                            </div>
+                          </label>
+                                    <input type="file" name="image" id="imagepreviewinput" style="display:none" accept="image/png, image/jpeg" />
+                                </div>
+                                <br>
+                                <div class="user-profile__details mt-1">
+                                    <input type="text" placeholder="Name" name="first_name" style="outline: none; border-color: transparent;" value="{{use.first_name}}"><br>
+                                    <input type="text" placeholder="Location" name="location" style="outline: none; border-color: transparent;" value="{{use.location}}"><br>
+                                    <textarea type="text" placeholder="Bio" name="bio" style="outline: none; border-color: transparent;" rows="4">{{use.bio}}</textarea><br>
+                                    <span class="user-profile__name"><button class="btn btn-outline-primary" style="border-radius:8px">Save Changes</button></span>
+                                </div>
+                            </form>
+                            <!-- <div class="user-profile__details mt-1">
+                                <span class="user-profile__name">${user.first_name}</span>
+                                <span class="user-profile__phone">${user.email}</span>
+                                <span class="user-profile__location">New York, United States</span><br>
+                            </div>
+                            <div class="user-profile__description">
+                                <p><strong>Bio: </strong>Fly me to the moon 🌙 If you feel like your life is a routine, step back and take a deep breath.</p>
+                            </div>
+                            <div class="user-profile__learning mt-4">
+                                <span class="user-profile__label">Social Medias</span>
+                                <ul class="user-profile__tags user-profile__tags--primary mt-2">
+                                    <li><a href="https://www.instagram.com/tiantsoa_sh/" target="_blank">Instagram</a></li>
+                                    <li><a href="https://www.linkedin.com/in/tiantsoa-rabemananjara-254655152/" target="_blank">Linkedin</a></li>
+                                    <li><a href="https://codepen.io/tiantsoa" target="_blank">Codepen</a></li>
+                                </ul>
+                            </div>
+                            <div class="user-profile__hobbies">
+                                <span class="user-profile__label">Activities</span>
+                                <ul class="user-profile__tags user-profile__tags--secondary mt-2">
+                                    <li>Biking</li>
+                                    <li>Cooking</li>
+                                    <li>Traveling</li>
+                                    <li>Grahic design</li>
+                                    <li>Traveling</li>
+                                    <li>Grahic design</li>
+                                    <li>Traveling</li>
+                                    <li>Grahic design</li>
+                                </ul>
+                            </div> -->
+                        </div>
+                        <div class="col-1"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="modal" id="logoutmodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div style="width: 100%; max-width: 100%; text-align: right;">
+                    <button type="button" class="btn-close m-3" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div style="width: 100%; max-width: 100%; text-align: center;">
+                        <i class="bi bi-box-arrow-right" style="font-size: 50px; color: royalblue;"></i>
+                    </div>
+                    <div style="width: 100%; max-width: 100%; text-align: center;">
+                        Do you want to logout?
+                    </div><br>
+                    <div style="width: 100%; max-width: 100%; text-align: center;">
+                        <a href="/logout/" class="btn btn-outline-danger">Logout</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-- Footer-->
+    <!-- <footer class="py-5 bg-dark">
+            <div class="container"><p class="m-0 text-center text-white">Copyright &copy; Your Website 2021</p></div>
+        </footer> -->
+    <script src="{% static 'js/jquery.js' %}"></script>
+    <!-- Core theme JS-->
+    <script src="{% static 'js/scripts.js' %}"></script>
+    <script src="{% static 'js/chat.js' %}"></script>
+    <script src="{% static 'js/chatt.js' %}" user="{{usr}}"></script>
+</body>
+
+</html>
+
+
+<!-- <div class="card">
+  <div class="card-header"
+style="background-image: url(https://res.cloudinary.com/dj14cmwoz/image/upload/v1491077482/profile-card/images/profile-picture.png)"
+  >
+
+        <div class="card-header-slanted-edge">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 200"><path class="polygon" d="M-20,200,1000,0V200Z" /></svg>
+            <a href="#" class="btn-follow"><span class="sr-only">Follow</span></a>
+        </div>
+  </div>
+
+  <div class="card-body">
+      <h2 class="name">John Smith</h2>
+      <h4 class="job-title">Product Designer</h4>
+      <div class="bio">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dignissimos, aperiam.</div>
+      
+  </div>
+</div> -->

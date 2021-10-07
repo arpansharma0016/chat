@@ -1,0 +1,110 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Register</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+<!--===============================================================================================-->	
+	<link rel="icon" type="image/png" href="{% static 'forms/images/icons/favicon.ico' %}"/>
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="{% static 'forms/vendor/bootstrap/css/bootstrap.min.css' %}">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="{% static 'forms/fonts/font-awesome-4.7.0/css/font-awesome.min.css' %}">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="{% static 'forms/fonts/iconic/css/material-design-iconic-font.min.css' %}">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="{% static 'forms/vendor/animate/animate.css' %}">
+<!--===============================================================================================-->	
+	<link rel="stylesheet" type="text/css" href="{% static 'forms/vendor/css-hamburgers/hamburgers.min.css' %}">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="{% static 'forms/vendor/animsition/css/animsition.min.css' %}">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="{% static 'forms/vendor/select2/select2.min.css' %}">
+<!--===============================================================================================-->	
+	<link rel="stylesheet" type="text/css" href="{% static 'forms/vendor/daterangepicker/daterangepicker.css' %}">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="{% static 'forms/css/util.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'forms/css/main.css' %}">
+<!--===============================================================================================-->
+</head>
+<body>
+	
+	<div class="limiter">
+		<div class="container-login100">
+			<div class="wrap-login100 p-t-85 p-b-20">
+				<form class="login100-form validate-form" method="POST">{% csrf_token %}
+					<span class="login100-form-title p-b-50">
+						Register
+					</span>
+                    {% for message in messages %}
+                    <p style="color: red;">{{message}}</p>
+                    {% endfor %}
+
+                    
+					<div class="wrap-input100 validate-input m-t-20 m-b-20" data-validate = "Enter your name">
+						<input class="input100" type="text" name="first_name" required>
+						<span class="focus-input100" data-placeholder="Name"></span>
+					</div>
+
+					<div class="wrap-input100 validate-input m-t-20 m-b-20" data-validate = "Enter Email">
+						<input class="input100" type="email" name="email" required>
+						<span class="focus-input100" data-placeholder="Email"></span>
+					</div>
+
+					<div class="wrap-input100 validate-input m-b-20" data-validate="Enter password">
+						<input class="input100" type="password" name="password1">
+						<span class="focus-input100" data-placeholder="Password"></span>
+					</div>
+
+					<div class="wrap-input100 validate-input m-b-20" data-validate="Re-enter password">
+						<input class="input100" type="password" name="password2">
+						<span class="focus-input100" data-placeholder="Password"></span>
+					</div>
+
+					<div class="container-login100-form-btn">
+						<button type="submit" class="login100-form-btn">
+							Register
+						</button>
+					</div>
+
+					<ul class="login-more p-t-30">
+
+						<li>
+							<span class="txt1">
+								Already have an account?
+							</span>
+
+							<a href="/login/" class="txt2">
+								Login
+							</a>
+						</li>
+					</ul>
+				</form>
+			</div>
+		</div>
+	</div>
+	
+
+	<div id="dropDownSelect1"></div>
+	
+<!--===============================================================================================-->
+	<script src="{% static 'forms/vendor/jquery/jquery-3.2.1.min.js' %}"></script>
+<!--===============================================================================================-->
+	<script src="{% static 'forms/vendor/animsition/js/animsition.min.js' %}"></script>
+<!--===============================================================================================-->
+	<script src="{% static 'forms/vendor/bootstrap/js/popper.js' %}"></script>
+	<script src="{% static 'forms/vendor/bootstrap/js/bootstrap.min.js' %}"></script>
+<!--===============================================================================================-->
+	<script src="{% static 'forms/vendor/select2/select2.min.js' %}"></script>
+<!--===============================================================================================-->
+	<script src="{% static 'forms/vendor/daterangepicker/moment.min.js' %}"></script>
+	<script src="{% static 'forms/vendor/daterangepicker/daterangepicker.js' %}"></script>
+<!--===============================================================================================-->
+	<script src="{% static 'forms/vendor/countdowntime/countdowntime.js' %}"></script>
+<!--===============================================================================================-->
+	<script src="{% static 'forms/js/main.js' %}"></script>
+
+</body>
+</html>

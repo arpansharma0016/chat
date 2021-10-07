@@ -1,0 +1,42 @@
+from django.urls import path, include
+from . import views
+from django.conf import settings
+from django.conf.urls.static import static
+
+urlpatterns = [
+    path('', views.index, name="index"),
+    path('login/', views.login, name="login"),
+    path('get_messages-<int:chat_id>/', views.get_messages, name="get_messages"),
+    path('send_message/', views.send_message, name="send_message"),
+    path('send_image/', views.send_image, name="send_image"),
+    path('check_reply-<int:chat_id>/', views.check_reply, name="check_reply"),
+    path('current_chat_set-<int:chat_id>/', views.current_chat_set, name="current_chat_set"),
+    path('disapprove_chat-<int:chat_id>/', views.disapprove_chat, name="disapprove_chat"),
+    path('approve_chat-<int:chat_id>/', views.approve_chat, name="approve_chat"),
+    path('seen_messages-<int:chat_id>/', views.seen_messages, name="seen_messages"),
+    path('load_more_messages-<int:chat_id>/', views.load_more_messages, name="load_more_messages"),
+    path('check_new_message/', views.check_new_message, name="check_new_message"),
+    path('user_came_online/', views.user_came_online, name="user_came_online"),
+    path('is_online/', views.is_online, name="is_online"),
+    path('user_went_offline/', views.user_went_offline, name="user_went_offline"),
+    path('search_users-<str:name>/', views.search_users, name="search_users"),
+    path('search_user_chats-<str:name>/', views.search_user_chats, name="search_user_chats"),
+    path('open_user-<int:id>/', views.open_user, name="open_user"),
+    path('delete_message-<int:id>/', views.delete_message, name="delete_message"),
+    path('add_user-<int:id>/', views.add_user, name="add_user"),
+    path('user_typing-<int:chat_id>/', views.user_typing, name="user_typing"),
+    path('user_not_typing-<int:chat_id>/', views.user_not_typing, name="user_not_typing"),
+    # path('start_vc-<int:chat_id>/', views.start_vc, name="start_vc"),
+    # path('end_vc-<int:chat_id>/', views.end_vc, name="end_vc"),
+    path('register/', views.register, name='register'),
+    path('forgot_password/', views.forgot_password, name='forgot_password'),
+    path('confirm_email/<str:uname>/', views.confirm_email, name='confirm_email'),
+    path('resend_code/<str:uname>/', views.resend_code, name='resend_code'),
+    path('enter_otp/<str:uname>/', views.enter_otp, name='enter_otp'),
+    path('enter_otp/', views.forgot_password, name='forgot_password'),
+    path('new_password/<str:uname>/', views.new_password, name='new_password'),
+    path('resend_pass_code/<str:uname>/', views.resend_pass_code, name='resend_pass_code'),
+    path('logout/', views.logout, name='logout'),
+    path('vc/', views.vc, name='vc'),
+    # path('discover/', include('discover.urls')),
+] + static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)
